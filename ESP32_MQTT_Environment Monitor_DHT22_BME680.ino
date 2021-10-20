@@ -25,7 +25,6 @@ float hum_reference = 40;
 int   getgasreference_count = 0;
 
 const int mosfetPin = 15;
-const int lightPin = 0;
 
 /****************** WiFi Credentials ******************/
 const char* ssid = SECRET_SSID;
@@ -50,10 +49,6 @@ void setup() {
   //Setup MOSFET pin and default to low
   pinMode(mosfetPin, OUTPUT);
   digitalWrite(mosfetPin, LOW);
-
-  //Setup light pin and default to low
-  pinMode(lightPin, OUTPUT);
-  digitalWrite(lightPin, LOW);
 
   dht_1.begin();
 
@@ -122,20 +117,6 @@ void callback(char* topic, byte* message, unsigned int length) {
     else if (messageTemp == "0") {
       Serial.println("off");
       digitalWrite(mosfetPin, LOW);
-    }
-  }
-
-  // ********************************************************** Light State
-  // Change pin state based on receive payload from MQTT
-  if (String(topic) == "printer/lights") {
-    Serial.print("Changing output to ");
-    if (messageTemp == "1") {
-      Serial.println("Test: on");
-      digitalWrite(lightPin, HIGH);
-    }
-    else if (messageTemp == "0") {
-      Serial.println("Test: off");
-      digitalWrite(lightPin, LOW);
     }
   }
 } //callback()
